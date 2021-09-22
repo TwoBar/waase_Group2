@@ -1,3 +1,4 @@
+#SenseHat is an add-on board that enables us to measure and collect sensor data and output info using built-in LED matrix.
 import subprocess
 from sense_hat import SenseHat
 import time
