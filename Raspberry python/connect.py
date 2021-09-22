@@ -1,5 +1,5 @@
 #SenseHat is an add-on board that enables us to measure and collect sensor data and output info using built-in LED matrix.
-#bluetooth library is to get the Pi to detect active bluetooth devices.
+#bluetooth library is used to get the Pi to detect active bluetooth devices.
 import subprocess
 from sense_hat import SenseHat
 import time
