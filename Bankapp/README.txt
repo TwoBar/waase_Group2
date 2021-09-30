@@ -1,25 +1,24 @@
-Velkommen til x Bank
+Welcome to Bank 6
 
-Vi har udarbejdet en lille bank app, og dette lille projekt er udarbejdet af gruppe 06 DK BEIT. 
+We have worked on a small bank app, and this little project is developed by group 6 DK BEIT
 
------ KØRSEL AF APPEN -----
-1: Sikre dig at du har python3 downloadet.
-2: Sikre dig at du har pip downloadet - $pip --version
-3: Download zip filen "Bankapp"
-4: Udpak zip filen
-5: Åben terminalen (Mac) - Kommandoprompt (Windows)
-6: pip install pillow
-7: pip install pymongo
-8: pip install pymongo[srv]
-9: pip install tk
-10: I terminalen / kommandoprompt find den korrekte path. Skriv "cd <pathname>" (eksempel: cd /Users/victorbjergby/Desktop/Bankapp"
-11: Sikre dig at Bank.py er I din path - Windows: "Dir" - Mac: "ls". Hvis den udskriver Secure.png, Bank.py, README.txt og KNOWN_ERRORS.txt, er du i den korrekte folder
-12: Kør filen. Windows: "Bank.py" - Mac: "python3 Bank.py"
+---- HOW TO USE THE APP ----
+1: Make sure to have python3 downloadet (Download on google)
+2: Make sure you have pip installed (Type $pip --version in your terminal)
+3: Download the sip file down "Bankapp"
+4: unzip the files to your pc, somewhere you can find it (Desktop recommended)
+5: Open your terminal (Mac) - Commandprompt (Windows)
+6: Install the modules in the terminal by typing:
+	pip install pillow
+	pip install pymongo
+	pip install pymongo[srv]
+	pip install tk
+7: In the terminal, find the correct path, where you unzipped the zip file. Type cd <pathname> (Example: cd /Users/victorbjergby/Desktop/Bankapp)
+8: Run the file by typing "Bank.py" (Windows) or "python3 Bank.py" (Mac)
 
-
------ ADGANG TIL DATABASEN -----
-1: Gå på https://www.mongodb.com
-2: login - Email: vict3687@stud.kea.dk, Password: Carlo1998
-3: Gå ind på Cluster0
-4: Gå under collections
-Her kan i se alle kunder, som er oprettet i databasen via appen.
+---- GET ACCESS TO DATABASE ----
+1: Go on https://www.mongodb.com
+2: Login - Email: vict3687@stud.kea.dk, Password: Carlo1998
+3: Click on Cluster0
+4: Go to collections
+This is where you can see all the users that is registret through the app
