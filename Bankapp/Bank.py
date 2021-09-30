@@ -3,6 +3,11 @@ from tkinter import *
 from PIL import ImageTk, Image
 from pymongo import MongoClient
 
+#Connecter til mongodb
+client = MongoClient("mongodb+srv://Victor:Skole@cluster0.ujn2z.mongodb.net/bank?retryWrites=true&w=majority")
+#Connecter til database Kunder, hvis den ikke eksistere, opretter den en ny
+db = client["Kunder"]
+collection = db["Kunder"]
 
 #Åbner vores gui - Main Screen, og kalder den Bank App 
 master = Tk()
