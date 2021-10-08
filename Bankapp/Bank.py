@@ -2,6 +2,8 @@
 from tkinter import *
 from PIL import ImageTk, Image
 from pymongo import MongoClient
+import pandas_datareader as web
+import matplotlib.pyplot as plt
 
 #Connecter til mongodb
 client = MongoClient("mongodb+srv://Victor:Skole@cluster0.ujn2z.mongodb.net/bank?retryWrites=true&w=majority")
@@ -75,6 +77,9 @@ def register():
     #Definere ny variable for hvis kunden vil logge ind
 def login_session():
     global login_cpr
+    stockphoto = Image.open('Unknown.png')
+    stockphoto = img.resize((250,150))
+    stockphoto = ImageTk.PhotoImage(stockphoto)
     login_cpr = temp_login_cpr.get()
     login_password = temp_login_password.get()
     #Cpr nummer skal stemme overens med et id, og med Password
@@ -91,108 +96,22 @@ def login_session():
         Label(account_dashboard, text="Velkommen "+navn,font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
         #Opretter 3 knapper
         Button(account_dashboard, text="Personlige oplysninger", font=('Calibri',12),width=30,command=personal_details).grid(row=2,sticky=N,padx=10)
-        Button(account_dashboard, text="Indsæt", font=('Calibri',12),width=30,command=deposit).grid(row=3,sticky=N,padx=10)
-        Button(account_dashboard, text="Hæve", font=('Calibri',12),width=30,command=withdraw).grid(row=4,sticky=N,padx=10)
+        Button(account_dashboard, text="Apple stock", image = stockphoto, font=('Calibri',12),width=30,command=AppleStock).grid(row=3,sticky=N,padx=10)
         Label(account_dashboard).grid(row=5,sticky=N, pady=10)
         return
     else:
         #Hvis login ikke er successfuldt
         login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
-def deposit():
-    #Definere nye funktioner for deposit
-    global bal
-    global amount
-    global deposit_notif
-    global updated_balance
-    global current_balance_label
-    amount = StringVar()
-    #Definere balance column i databasen som en funktion "bal"
-    balance = collection.find({'_id': login_cpr}, {'Balance': 1, '_id': 0})
-    for bala in balance:
-        bal = bala["Balance"]
-    #Deposit screen
-    deposit_screen = Toplevel(master)
-    deposit_screen.title('Indsæt penge')
-    #Labels
-    Label(deposit_screen, text=" ", font=("Calibri",12)).grid(row=0,sticky=N,pady=10)
-    current_balance_label = Label(deposit_screen, text="Nuværende balance : "+str(bal)+"DKK", font=("Calibri",12))
-    current_balance_label.grid(row=1,sticky=W)
-    Label(deposit_screen, text="Indsæt beløb : ", font=('Calibri',12)).grid(row=2,sticky=N)
-    deposit_notif = Label(deposit_screen, font=('Calibri',12))
-    deposit_notif.grid(row=4, sticky=N,pady=5)
-    #Entry
-    Entry(deposit_screen, textvariable=amount).grid(row=2,column=1)
-    #Button
-    Button(deposit_screen,text='Finish', font=('Calibri',12),command=finish_deposit).grid(row=3,sticky=W,pady=5)
-
-def finish_deposit():
-    #Sikre at kunden har udfyldt feltet, og at kunden ikke prøver at indsætte 0 eller minus tal
-    try:
-        if amount.get() == "":
-            deposit_notif.config(text='Indsæt et beløb',fg="red")
-            return
-        if float(amount.get()) <= 0:
-            deposit_notif.config(text='Negativt beløb indtastet',fg="red")
-            return
-    except ValueError:
-        deposit_notif.config(text='Indtast et tal',fg="red")
-    #Ligger kundens nuværende balance, sammen med kundens nye indsatte penge
-    current_balance = bal
-    updated_balance = float(current_balance) + float(amount.get())
-    #opdatere column balance i databasen, til den nye balance efter indsættelse af penge
-    current_balance = collection.update_one({'_id': login_cpr}, {"$set": {'Balance': updated_balance}})
-
-    current_balance_label.config(text="Current Balance : "+str(updated_balance), fg='green')
-    deposit_notif.config(text='Balance Updated',fg="green")
-
-def withdraw():
-    #Veriabler
-    global bal
-    global withdraw_amount
-    global withdraw_notif
-    global current_balance_label
-    withdraw_amount = StringVar()
-    #Definere balance column i databasen som en funktion "bal"
-    balance = collection.find({'_id': login_cpr}, {'Balance': 1, '_id': 0})
-    for bala in balance:
-        bal = bala["Balance"]
-    #Deposit screen
-    withdraw_screen = Toplevel(master)
-    withdraw_screen.title('Hæv penge')
-    #Labels
-    Label(withdraw_screen, text=" ", font=("Calibri",12)).grid(row=0,sticky=N,pady=10)
-    current_balance_label = Label(withdraw_screen, text="Nuværende balance : "+str(bal)+"DKK", font=("Calibri",12))
-    current_balance_label.grid(row=1,sticky=W)
-    Label(withdraw_screen, text="Hæv beløb : ", font=('Calibri',12)).grid(row=2,sticky=N)
-    withdraw_notif = Label(withdraw_screen, font=('Calibri',12))
-    withdraw_notif.grid(row=4, sticky=N,pady=5)
-    #Entry
-    Entry(withdraw_screen, textvariable=withdraw_amount).grid(row=2,column=1)
-    #Button
-    Button(withdraw_screen,text='Finish', font=('Calibri',12),command=finish_withdraw).grid(row=3,sticky=W,pady=5)
-
-def finish_withdraw():
-    #Sikre at kunden har udfyldt feltet, og at kunden ikke prøver at indsætte 0 eller minus tal
-    try:
-        if withdraw_amount.get() == "":
-            withdraw_notif.config(text='Indsæt et beløb',fg="red")
-            return
-        if float(withdraw_amount.get()) <= 0:
-            withdraw_notif.config(text='Negativt beløb indtastet',fg="red")
-            return
-        if float(withdraw_amount.get()) > float(bal):
-            withdraw_notif.config(text='Du har ikke penge nok', fg='red')
-            return
-    except ValueError:
-        withdraw_notif.config(text='Indtast et tal', fg='red')
-    #opdatere column balance i databasen, til den nye balance efter indsættelse af penge
-    current_balance = bal
-    updated_balance = current_balance
-    updated_balance = float(updated_balance) - float(withdraw_amount.get())
-    current_balance = collection.update_one({'_id': login_cpr}, {"$set": {'Balance': updated_balance}})
-
-    current_balance_label.config(text="Current Balance : "+str(updated_balance), fg='green')
-    withdraw_notif.config(text='Balance Updated',fg="green")
+def AppleStock():
+    #Vi får fat i aktie data
+    #Plot aktie kurven for aktieselskabet
+    plt.figure(figsize=(16,8))
+    df = web.DataReader('AAPL', data_source='yahoo', start='2019-01-01', end='2021-12-27')
+    plt.title('Apple')
+    plt.plot(df['Close'])
+    plt.xlabel('Date', fontsize=18)
+    plt.ylabel('Close Price USD ($)', fontsize=18)
+    plt.show()
 
 def personal_details():
     #Definere de foskellige columns i databasen som variabler
