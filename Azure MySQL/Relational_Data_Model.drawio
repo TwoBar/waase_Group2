@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-09T18:53:51.899Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36" etag="CObJdMbUmiVnpTsgW42G" version="15.5.0" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-09T18:56:14.611Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36" etag="DajxPkmpfKJ4LbgnhnmB" version="15.5.0" type="github">
   <diagram id="wnwZb4j0WM0rFhYcQIXO" name="Page-1">
     <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="200000" pageHeight="200000" math="0" shadow="0">
       <root>
@@ -272,7 +272,7 @@
             <mxRectangle width="150" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="7-r78uufoLVmalZziA5J-104" value="VARCHAR(255)" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" vertex="1" parent="7-r78uufoLVmalZziA5J-101">
+        <mxCell id="7-r78uufoLVmalZziA5J-104" value="INT" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;" vertex="1" parent="7-r78uufoLVmalZziA5J-101">
           <mxGeometry x="180" width="140" height="30" as="geometry">
             <mxRectangle width="140" height="30" as="alternateBounds" />
           </mxGeometry>
