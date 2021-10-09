@@ -1,0 +1,51 @@
+USE waaseteam2 ;
+
+DROP TABLE IF EXISTS waaseteam2.user;
+
+CREATE TABLE user (
+ID INT NOT NULL AUTO_INCREMENT,
+first_name VARCHAR(255),
+last_name VARCHAR(255),
+email VARCHAR(255),
+password VARCHAR(255),
+last_updated TIMESTAMP DEFAULT now(),
+PRIMARY KEY (ID)
+) AUTO_INCREMENT = 0;
+
+DROP TABLE IF EXISTS waaseteam2.device_type;
+
+CREATE TABLE device_type (
+ID INT NOT NULL AUTO_INCREMENTdata_type,
+model VARCHAR(255),
+PRIMARY KEY (ID)
+) AUTO_INCREMENT = 0;
+
+DROP TABLE IF EXISTS waaseteam2.device;
+
+CREATE TABLE device (
+ID INT NOT NULL AUTO_INCREMENT,
+device_password VARCHAR(255),
+device_type_ID INT NOT NULL,
+PRIMARY KEY (ID),
+FOREIGN KEY (device_type_ID) REFERENCES device_type(ID)
+) AUTO_INCREMENT = 0;
+
+DROP TABLE IF EXISTS waaseteam2.data_type;
+
+CREATE TABLE data_type (
+ID INT NOT NULL AUTO_INCREMENT,
+data_category VARCHAR(255),
+PRIMARY KEY (ID)
+) AUTO_INCREMENT = 0;
+
+DROP TABLE IF EXISTS waaseteam2.input_data;
+
+CREATE TABLE input_data (
+user_ID INT NOT NULL,
+device_ID INT NOT NULL,
+data_type_ID INT NOT NULL,
+input VARCHAR(255),
+FOREIGN KEY (user_ID) REFERENCES user(ID),
+FOREIGN KEY (device_ID) REFERENCES device(ID),
+FOREIGN KEY (data_type_ID) REFERENCES data_type(ID)
+);
