@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-09T18:03:54.932Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36" etag="cH7Bd5jdgwiaDRJ1NWQM" version="15.5.0" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-09T18:54:10.398Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36" etag="BRU6A9qDT4sr1sCEnDKd" version="15.5.0" type="github">
   <diagram id="NXKH9OekvMDb-WQwvyIM" name="Page-1">
     <mxGraphModel dx="2062" dy="1154" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="200000" pageHeight="200000" math="0" shadow="0">
       <root>
@@ -16,10 +16,10 @@
         <mxCell id="jwMvEWTDmsHy84tJd6QA-44" value="Serial number&#xa;Password&#xa;Model" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="jwMvEWTDmsHy84tJd6QA-43">
           <mxGeometry y="30" width="160" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="jwMvEWTDmsHy84tJd6QA-45" value="Data" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
+        <mxCell id="jwMvEWTDmsHy84tJd6QA-45" value="Input_data" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
           <mxGeometry x="400" y="280" width="160" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="jwMvEWTDmsHy84tJd6QA-46" value="Input data&#xa;Data type" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="jwMvEWTDmsHy84tJd6QA-45">
+        <mxCell id="jwMvEWTDmsHy84tJd6QA-46" value="Input&#xa;Data type" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="jwMvEWTDmsHy84tJd6QA-45">
           <mxGeometry y="30" width="160" height="90" as="geometry" />
         </mxCell>
         <mxCell id="jwMvEWTDmsHy84tJd6QA-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;endArrow=ERzeroToMany;endFill=0;startArrow=ERmandOne;startFill=0;" edge="1" parent="1" source="jwMvEWTDmsHy84tJd6QA-42" target="jwMvEWTDmsHy84tJd6QA-46">
