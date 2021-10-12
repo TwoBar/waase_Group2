@@ -4,6 +4,7 @@ from PIL import ImageTk, Image
 from pymongo import MongoClient
 import pandas_datareader as web
 import matplotlib.pyplot as plt
+from yahoo_fin import stock_info
 
 #Connecter til mongodb
 client = MongoClient("mongodb+srv://Victor:Skole@cluster0.ujn2z.mongodb.net/bank?retryWrites=true&w=majority")
@@ -75,15 +76,15 @@ def register():
     #Opretter en knap som hedder "Registrer"
     Button(register_screen, text="Registrer", command = finish_reg, font=('Calibri',12)).grid(row=6, sticky=N,pady=10)
     #Definere ny variable for hvis kunden vil logge ind
+
+
 def login_session():
     global login_cpr
-    stockphoto = Image.open('Unknown.png')
-    stockphoto = img.resize((250,150))
-    stockphoto = ImageTk.PhotoImage(stockphoto)
     login_cpr = temp_login_cpr.get()
     login_password = temp_login_password.get()
     #Cpr nummer skal stemme overens med et id, og med Password
     if collection.find_one({'_id': login_cpr}) and collection.find_one({'Password': login_password}):
+        Current_stock = StringVar()
         #Finder denne kundes navn, ved hjælp af cpr nummer
         name = collection.find_one({'_id': login_cpr}, {'Navn': 1, '_id': 0})
         navn = name['Navn']
@@ -95,19 +96,72 @@ def login_session():
         Label(account_dashboard, text="Account oversigt",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
         Label(account_dashboard, text="Velkommen "+navn,font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
         #Opretter 3 knapper
-        Button(account_dashboard, text="Personlige oplysninger", font=('Calibri',12),width=30,command=personal_details).grid(row=2,sticky=N,padx=10)
-        Button(account_dashboard, text="Apple stock", image = stockphoto, font=('Calibri',12),width=30,command=AppleStock).grid(row=3,sticky=N,padx=10)
-        Label(account_dashboard).grid(row=5,sticky=N, pady=10)
+        Button(account_dashboard, text="Profil", image = profilimage,command=personal_details).grid(row=3, sticky=N)
+        #Button(account_dashboard, text="Stocks", font=('Calibri',12),width=30,command=personal_details).grid(row=2,sticky=N,padx=10)
+        #Button(account_dashboard, text="Clock", font=('Calibri',12),width=30,command=Stocks).grid(row=3,sticky=N,padx=10)
+        Label(account_dashboard, text="Company Symbol : ").grid(row=4, sticky=W)
+        Label(account_dashboard, text="Stock current value:").grid(row=7, sticky=W)
+
+        def stock_price():
+     
+            price = stock_info.get_live_price(e1.get())
+            Current_stock.set(price)
+ 
+        result2 = Label(account_dashboard, text="", textvariable=Current_stock).grid(row=7, column=1, sticky=W)
+ 
+        e1 = Entry(account_dashboard)
+        e1.grid(row=4, column=1)
+ 
+        b = Button(account_dashboard, text="Show", command=stock_price)
+        b.grid(row=4, column=2, columnspan=2, rowspan=2, padx=5, pady=5)
+        #Button(account_dashboard, text="Apple stock", image = appleimage, command=AppleStock).grid(row=4, column=0)
+        #Button(account_dashboard, text="Netflix stock", image = netfliximage, command=NetflixStock).grid(row=4, column=1)
+        #Button(account_dashboard, text="Amazon stock", image = Amazonimage, command=AmazonStock).grid(row=5, column=0)
+        #Button(account_dashboard, text="Facebook stock", image = Facebookimage, command=FacebookStock).grid(row=5, column=1)
         return
     else:
         #Hvis login ikke er successfuldt
         login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
+
 def AppleStock():
     #Vi får fat i aktie data
     #Plot aktie kurven for aktieselskabet
     plt.figure(figsize=(16,8))
     df = web.DataReader('AAPL', data_source='yahoo', start='2019-01-01', end='2021-12-27')
     plt.title('Apple')
+    plt.plot(df['Close'])
+    plt.xlabel('Date', fontsize=18)
+    plt.ylabel('Close Price USD ($)', fontsize=18)
+    plt.show()
+
+def NetflixStock():
+    #Vi får fat i aktie data
+    #Plot aktie kurven for aktieselskabet
+    plt.figure(figsize=(16,8))
+    df = web.DataReader('NFLX', data_source='yahoo', start='2019-01-01', end='2021-12-27')
+    plt.title('Netflix')
+    plt.plot(df['Close'])
+    plt.xlabel('Date', fontsize=18)
+    plt.ylabel('Close Price USD ($)', fontsize=18)
+    plt.show()
+
+def AmazonStock():
+    #Vi får fat i aktie data
+    #Plot aktie kurven for aktieselskabet
+    plt.figure(figsize=(16,8))
+    df = web.DataReader('AMZN', data_source='yahoo', start='2019-01-01', end='2021-12-27')
+    plt.title('Amazon')
+    plt.plot(df['Close'])
+    plt.xlabel('Date', fontsize=18)
+    plt.ylabel('Close Price USD ($)', fontsize=18)
+    plt.show()
+
+def FacebookStock():
+    #Vi får fat i aktie data
+    #Plot aktie kurven for aktieselskabet
+    plt.figure(figsize=(16,8))
+    df = web.DataReader('FB', data_source='yahoo', start='2019-01-01', end='2021-12-27')
+    plt.title('Facebook')
     plt.plot(df['Close'])
     plt.xlabel('Date', fontsize=18)
     plt.ylabel('Close Price USD ($)', fontsize=18)
@@ -164,10 +218,31 @@ img = Image.open('Secure.png')
 img = img.resize((250,150))
 img = ImageTk.PhotoImage(img)
 
+appleimage = Image.open('apple.png')
+appleimage = appleimage.resize((150,150))
+appleimage = ImageTk.PhotoImage(appleimage)
+
+netfliximage = Image.open('netflix.png')
+netfliximage = netfliximage.resize((150,150))
+netfliximage = ImageTk.PhotoImage(netfliximage)
+
+profilimage = Image.open('profil.png')
+profilimage = profilimage.resize((50,50))
+profilimage = ImageTk.PhotoImage(profilimage)
+
+Facebookimage = Image.open('facebook.png')
+Facebookimage = Facebookimage.resize((150,150))
+Facebookimage = ImageTk.PhotoImage(Facebookimage)
+
+Amazonimage = Image.open('amazon.png')
+Amazonimage = Amazonimage.resize((150,150))
+Amazonimage = ImageTk.PhotoImage(Amazonimage)
+
 #Labels
 Label(master, text = "Bank 06", font=('Calibri',14)).grid(row=0,sticky=N,pady=10)
 Label(master, text = "Sikker Bank", font=('Calibri',12)).grid(row=1,sticky=N)
 Label(master, image=img).grid(row=2,sticky=N,pady=15)
+
 
 #Buttons
 Button(master, text='Register', font=('Calibri',12), width=20,command=register).grid(row=3,sticky=N)
