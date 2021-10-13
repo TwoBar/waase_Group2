@@ -1,5 +1,6 @@
 #Import alle de nødvendige moduller
 from tkinter import *
+import time
 from PIL import ImageTk, Image
 from pymongo import MongoClient
 import pandas_datareader as web
@@ -77,6 +78,18 @@ def register():
     Button(register_screen, text="Registrer", command = finish_reg, font=('Calibri',12)).grid(row=6, sticky=N,pady=10)
     #Definere ny variable for hvis kunden vil logge ind
 
+def clock():
+    Clock_screen = Toplevel(master)
+    Clock_screen.title('Clock')
+    digi_clock = Label(Clock_screen, font=('Calibri',100), bg="red", fg="black")
+    def present_time():
+        display_time = time.strftime("%H:%M:%S")
+        digi_clock.config(text=display_time)
+        digi_clock.after(200,present_time)
+    present_time()
+    digi_clock.pack()
+    
+
 
 def login_session():
     global login_cpr
@@ -84,7 +97,6 @@ def login_session():
     login_password = temp_login_password.get()
     #Cpr nummer skal stemme overens med et id, og med Password
     if collection.find_one({'_id': login_cpr}) and collection.find_one({'Password': login_password}):
-        Current_stock = StringVar()
         #Finder denne kundes navn, ved hjælp af cpr nummer
         name = collection.find_one({'_id': login_cpr}, {'Navn': 1, '_id': 0})
         navn = name['Navn']
@@ -97,27 +109,8 @@ def login_session():
         Label(account_dashboard, text="Velkommen "+navn,font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
         #Opretter 3 knapper
         Button(account_dashboard, text="Profil", image = profilimage,command=personal_details).grid(row=3, sticky=N)
-        #Button(account_dashboard, text="Stocks", font=('Calibri',12),width=30,command=personal_details).grid(row=2,sticky=N,padx=10)
-        #Button(account_dashboard, text="Clock", font=('Calibri',12),width=30,command=Stocks).grid(row=3,sticky=N,padx=10)
-        Label(account_dashboard, text="Company Symbol : ").grid(row=4, sticky=W)
-        Label(account_dashboard, text="Stock current value:").grid(row=7, sticky=W)
-
-        def stock_price():
-     
-            price = stock_info.get_live_price(e1.get())
-            Current_stock.set(price)
- 
-        result2 = Label(account_dashboard, text="", textvariable=Current_stock).grid(row=7, column=1, sticky=W)
- 
-        e1 = Entry(account_dashboard)
-        e1.grid(row=4, column=1)
- 
-        b = Button(account_dashboard, text="Show", command=stock_price)
-        b.grid(row=4, column=2, columnspan=2, rowspan=2, padx=5, pady=5)
-        #Button(account_dashboard, text="Apple stock", image = appleimage, command=AppleStock).grid(row=4, column=0)
-        #Button(account_dashboard, text="Netflix stock", image = netfliximage, command=NetflixStock).grid(row=4, column=1)
-        #Button(account_dashboard, text="Amazon stock", image = Amazonimage, command=AmazonStock).grid(row=5, column=0)
-        #Button(account_dashboard, text="Facebook stock", image = Facebookimage, command=FacebookStock).grid(row=5, column=1)
+        Button(account_dashboard, text="Stocks",command=AllStocks,font=('Calibri',12),width=30).grid(row=4,sticky=N,padx=10)
+        Button(account_dashboard, text="Clock", command=clock,font=('Calibri',12),width=30).grid(row=5,sticky=N,padx=10)
         return
     else:
         #Hvis login ikke er successfuldt
@@ -213,6 +206,34 @@ def login():
     #Button
     Button(login_screen, text="Login", command=login_session, width=15,font=('Calibri',12)).grid(row=3,sticky=W,pady=5,padx=5)
 
+
+def AllStocks():
+    Current_stock = StringVar()
+#Personal Details Screen
+    AllStocks_screen = Toplevel(master)
+    AllStocks_screen.title('All Stocks')
+    #Buttons
+    Button(AllStocks_screen, text="Apple stock", image = appleimage, command=AppleStock).grid(row=0, column=0)
+    Button(AllStocks_screen, text="Netflix stock", image = netfliximage, command=NetflixStock).grid(row=0, column=1)
+    Button(AllStocks_screen, text="Amazon stock", image = Amazonimage, command=AmazonStock).grid(row=1, column=0)
+    Button(AllStocks_screen, text="Facebook stock", image = Facebookimage, command=FacebookStock).grid(row=1, column=1)
+    Label(AllStocks_screen, text="Company Symbol : ").grid(row=4, sticky=W)
+    Label(AllStocks_screen, text="Stock current value:").grid(row=6, sticky=W)
+
+    def stock_price():
+     
+        price = stock_info.get_live_price(e1.get())
+        Current_stock.set(price)
+ 
+    result2 = Label(AllStocks_screen, text="", textvariable=Current_stock).grid(row=6, column=1, sticky=W)
+ 
+    e1 = Entry(AllStocks_screen)
+    e1.grid(row=4, column=1)
+ 
+    b = Button(AllStocks_screen, text="Show", command=stock_price)
+    b.grid(row=4, column=2, columnspan=2, rowspan=2, padx=5, pady=5)
+
+
 #Image import
 img = Image.open('Secure.png')
 img = img.resize((250,150))
@@ -237,6 +258,10 @@ Facebookimage = ImageTk.PhotoImage(Facebookimage)
 Amazonimage = Image.open('amazon.png')
 Amazonimage = Amazonimage.resize((150,150))
 Amazonimage = ImageTk.PhotoImage(Amazonimage)
+
+Stocksimage = Image.open('stocks.png')
+Stocksimage = Stocksimage.resize((150,150))
+Stocksimage = ImageTk.PhotoImage(Stocksimage)
 
 #Labels
 Label(master, text = "Bank 06", font=('Calibri',14)).grid(row=0,sticky=N,pady=10)
