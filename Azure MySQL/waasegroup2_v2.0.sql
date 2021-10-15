@@ -1,6 +1,11 @@
 USE waaseteam2 ;
 
+DROP TABLE IF EXISTS waaseteam2.input_data;
+DROP TABLE IF EXISTS waaseteam2.data_type;
+DROP TABLE IF EXISTS waaseteam2.device;
 DROP TABLE IF EXISTS waaseteam2.user;
+DROP TABLE IF EXISTS waaseteam2.device_type;
+
 
 CREATE TABLE user (
 ID INT NOT NULL AUTO_INCREMENT,
@@ -12,25 +17,26 @@ last_updated TIMESTAMP DEFAULT now(),
 PRIMARY KEY (ID)
 ) AUTO_INCREMENT = 0;
 
-DROP TABLE IF EXISTS waaseteam2.device_type;
+
 
 CREATE TABLE device_type (
-ID INT NOT NULL AUTO_INCREMENTdata_type,
+ID INT NOT NULL AUTO_INCREMENT,
 model VARCHAR(255),
 PRIMARY KEY (ID)
 ) AUTO_INCREMENT = 0;
 
-DROP TABLE IF EXISTS waaseteam2.device;
 
 CREATE TABLE device (
-ID INT NOT NULL AUTO_INCREMENT,
+MAC_address VARCHAR(17) NOT NULL ,
 device_password VARCHAR(255),
 device_type_ID INT NOT NULL,
-PRIMARY KEY (ID),
-FOREIGN KEY (device_type_ID) REFERENCES device_type(ID)
+user_ID_device INT NOT NULL,
+last_updated TIMESTAMP DEFAULT now(),
+PRIMARY KEY (MAC_address),
+FOREIGN KEY (device_type_ID) REFERENCES device_type(ID), 
+FOREIGN KEY (user_ID_device) REFERENCES user(ID)
 ) AUTO_INCREMENT = 0;
 
-DROP TABLE IF EXISTS waaseteam2.data_type;
 
 CREATE TABLE data_type (
 ID INT NOT NULL AUTO_INCREMENT,
@@ -38,14 +44,14 @@ data_category VARCHAR(255),
 PRIMARY KEY (ID)
 ) AUTO_INCREMENT = 0;
 
-DROP TABLE IF EXISTS waaseteam2.input_data;
 
 CREATE TABLE input_data (
-user_ID INT NOT NULL,
-device_ID INT NOT NULL,
+user_ID_data INT NOT NULL,
+device_ID VARCHAR(17) NOT NULL,
 data_type_ID INT NOT NULL,
 input VARCHAR(255),
-FOREIGN KEY (user_ID) REFERENCES user(ID),
-FOREIGN KEY (device_ID) REFERENCES device(ID),
+entry_time TIMESTAMP DEFAULT now(),
+FOREIGN KEY (user_ID_data) REFERENCES user(ID),
+FOREIGN KEY (device_ID) REFERENCES device(MAC_address),
 FOREIGN KEY (data_type_ID) REFERENCES data_type(ID)
 );
