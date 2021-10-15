@@ -10,12 +10,12 @@ app.get("/", (req, res) => {
   res.json({ message: "Whats good."});
 });
 require("./app/routes/user_routes.js")(app);
-app.listen(6060);
+app.listen(3000);
 
 
 
 
 
 app.listen(3000, () => {
-  console.log("Server is running on port 6060.");
+  console.log("Server is running on port 3000.");
 });
