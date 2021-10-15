@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
   res.json({ message: "Whats good."});
 });
-require("./app/routes/user.routes.js")(app);
+require("./app/routes/user_routes.js")(app);
 app.listen(6060);
 
 
