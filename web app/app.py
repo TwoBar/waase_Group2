@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request, redirect,jsonify
 from flask_mysqldb import MySQL
-from datetime import datetime
 import mysql.connector
+import flask
 
+
+print(flask.__version__)
+
+print(mysql.connector.__version__)
 
 
 app = Flask(__name__)
@@ -20,12 +24,12 @@ myresult = mycursor.fetchall()
 @app.route('/', methods=['GET', 'POST'])
 def mac():
     mac = request.form
-    mac  = mac['eventType']
+    mac  = mac['mac']
     print(mac)
     for x in myresult:
         if mac == x[3]:
             print(x)
-            return jsonify(message="My name is " + x[2])
+            return jsonify(message= x[2])
     return jsonify(message="My name is " + mac)
 
 

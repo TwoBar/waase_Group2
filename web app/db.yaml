@@ -1,5 +1,0 @@
-
-mysql_host: 'waaseteam2.mysql.database.azure.com'
-mysql_user: 'group2@waaseteam2'
-mysql_password: 'Waaseteam2'
-mysql_db: 'waaseteam2'
