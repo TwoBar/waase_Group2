@@ -1,12 +1,6 @@
 from flask import Flask, render_template, request, redirect,jsonify
 from flask_mysqldb import MySQL
 import mysql.connector
-import flask
-
-
-print(flask.__version__)
-
-print(mysql.connector.__version__)
 
 
 app = Flask(__name__)
