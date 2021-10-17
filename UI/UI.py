@@ -2,16 +2,21 @@
 from tkinter import *
 import time
 from PIL import ImageTk, Image
-from pymongo import MongoClient
+import mysql.connector
+from mysql.connector import cursor
 import pandas_datareader as web
 import matplotlib.pyplot as plt
 from yahoo_fin import stock_info
 
-#Connecter til mongodb
-client = MongoClient("mongodb+srv://Victor:Skole@cluster0.ujn2z.mongodb.net/bank?retryWrites=true&w=majority")
+
 #Connecter til database Kunder, hvis den ikke eksistere, opretter den en ny
-db = client["Kunder"]
-collection = db["Kunder"]
+db = mysql.connector.connect(
+    host="waaseteam2.mysql.database.azure.com",
+    user="group2@waaseteam2",
+    passwd="Waaseteam2",
+    database="waaseteam2",
+)
+mycursor = db.cursor()
 
 #Åbner vores gui - Main Screen, og kalder den Bank App 
 master = Tk()
@@ -21,36 +26,32 @@ master.title('Project')
 #Definere funktion for kunde oprettelse
 def finish_reg():
     email = temp_email.get() #Definere variabler, som information som systemet får af kunden ved hjælp af .get() funktion
-    name = temp_name.get()
-    age = temp_age.get()
-    gender = temp_gender.get()
+    first_name = temp_firstname.get()
+    last_name = temp_lastname.get()
     password = temp_password.get()
 
-    if email == "" or name == "" or age == "" or gender == "" or password == "": #Sikre kunden udfylder alle felter.
-        notif.config(fg="red",text="Please udfyld alle oplysninger * ") #Hvis et af felterne er tomme, skrives dette til kunden
-        return
-    if collection.find_one({'_id': email}): #sikre at kunden ikke allerede eksistere i systemet. Dette gøres ved hjælp af find_one, på id's
-        notif.config(fg="red",text="Account eksisterer allerede")
-        return
-    else:
-        #Hvis kunden har udfyldt alle felter, og ikke allerede eksisterer, så oprettes kunden i databasen.
-        mydict = {"_id": email, "Navn": name, "Alder": age, "Gender": gender, "Password": password, "Balance": "0"}
-        collection.insert_one(mydict)
-        notif.config(fg="green", text="Bruger oprettet")
+    #if email == "" or first_name == "" or last_name == "" or password == "": #Sikre kunden udfylder alle felter.
+        #notif.config(fg="red",text="Please udfyld alle oplysninger * ") #Hvis et af felterne er tomme, skrives dette til kunden
+        #return
+    #if collection.find_one({'email': email}): #sikre at kunden ikke allerede eksistere i systemet. Dette gøres ved hjælp af find_one, på id's
+       # notif.config(fg="red",text="Account eksisterer allerede")
+        #return
+    #else:
+    mycursor.execute("INSERT INTO user (first_name, last_name, email, password) VALUES (%s,%s,%s,%s)", (first_name, last_name, email, password))
+    db.commit()
+    notif.config(fg="green", text="Bruger oprettet")
 
 #Ny variable defineres som register
 def register():
     #Definere variabler som skal bruges på login skærmen
     global temp_email
-    global temp_name
-    global temp_age
-    global temp_gender
+    global temp_firstname
+    global temp_lastname
     global temp_password
     global notif
     temp_email = StringVar()
-    temp_name = StringVar()
-    temp_age =  StringVar()
-    temp_gender = StringVar()
+    temp_firstname = StringVar()
+    temp_lastname =  StringVar()
     temp_password = StringVar()
 
     #Åbner login skærmen
@@ -60,19 +61,17 @@ def register():
     #Laver labels på skærmen
     Label(register_screen, text="Udfyldt dine detaljer her, for at opret dig", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
     Label(register_screen, text="Email", font=('Calibri',12)).grid(row=1,sticky=W)
-    Label(register_screen, text="Navn", font=('Calibri',12)).grid(row=2,sticky=W)
-    Label(register_screen, text="Alder", font=('Calibri',12)).grid(row=3,sticky=W)
-    Label(register_screen, text="Gender", font=('Calibri',12)).grid(row=4,sticky=W)
-    Label(register_screen, text="Password", font=('Calibri',12)).grid(row=5,sticky=W)
+    Label(register_screen, text="First name", font=('Calibri',12)).grid(row=2,sticky=W)
+    Label(register_screen, text="Last name", font=('Calibri',12)).grid(row=3,sticky=W)
+    Label(register_screen, text="Password", font=('Calibri',12)).grid(row=4,sticky=W)
     notif = Label(register_screen, font=('Calibri',12))
     notif.grid(row=7,sticky=N,pady=10)    
 
     #Entries
     Entry(register_screen, textvariable=temp_email) .grid(row=1, column=1,padx=5)
-    Entry(register_screen, textvariable=temp_name) .grid(row=2, column=1,padx=5)
-    Entry(register_screen, textvariable=temp_age) .grid(row=3, column=1,padx=5)
-    Entry(register_screen, textvariable=temp_gender) .grid(row=4, column=1,padx=5)
-    Entry(register_screen, textvariable=temp_password,show="*") .grid(row=5, column=1,padx=5)
+    Entry(register_screen, textvariable=temp_firstname) .grid(row=2, column=1,padx=5)
+    Entry(register_screen, textvariable=temp_lastname) .grid(row=3, column=1,padx=5)
+    Entry(register_screen, textvariable=temp_password,show="*") .grid(row=4, column=1,padx=5)
 
     #Opretter en knap som hedder "Registrer"
     Button(register_screen, text="Registrer", command = finish_reg, font=('Calibri',12)).grid(row=6, sticky=N,pady=10)
@@ -96,22 +95,28 @@ def login_session():
     login_email = temp_login_email.get()
     login_password = temp_login_password.get()
     #Cpr nummer skal stemme overens med et id, og med Password
-    if collection.find_one({'_id': login_email}) and collection.find_one({'Password': login_password}):
+    mycursor.execute("SELECT email FROM user")
+    myresult = mycursor.fetchall()
+    for x in myresult:
+        dev = x[0]
+    mycursor.execute("SELECT password FROM user")
+    results = mycursor.fetchall()
+    for pssw in results:
+        pss = pssw[0]
+    if login_email == dev and login_password == pss:
+            
         #Finder denne kundes navn, ved hjælp af cpr nummer
-        name = collection.find_one({'_id': login_email}, {'Navn': 1, '_id': 0})
-        navn = name['Navn']
         #Åbner en ny skærm efter login er successfuldt 
         login_screen.destroy()
         account_dashboard = Toplevel(master)
         account_dashboard.title('Dashboard')
         #opretter labels på denne skærm
         Label(account_dashboard, text="Account oversigt",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
-        Label(account_dashboard, text="Velkommen "+navn,font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
+        Label(account_dashboard, text="Velkommen til din profil",font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
         #Opretter 3 knapper
-        Button(account_dashboard, text="Profil", image = profilimage,command=personal_details).grid(row=3, sticky=N)
+        #Button(account_dashboard, text="Profil", image = profilimage,command=personal_details).grid(row=3, sticky=N)
         Button(account_dashboard, text="Stocks",command=AllStocks,font=('Calibri',12),width=30).grid(row=4,sticky=N,padx=10)
         Button(account_dashboard, text="Clock", command=clock,font=('Calibri',12),width=30).grid(row=5,sticky=N,padx=10)
-        return
     else:
         #Hvis login ikke er successfuldt
         login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
@@ -160,11 +165,12 @@ def FacebookStock():
     plt.ylabel('Close Price USD ($)', fontsize=18)
     plt.show()
 
-def personal_details():
+#def personal_details():
     #Definere de foskellige columns i databasen som variabler
-    details_name = collection.find({'_id': login_email}, {'Navn': 1, '_id': 0})
-    for names in details_name:
-       name = names['Navn']
+    mycursor.execute("SELECT email FROM user where ")
+    myresult = mycursor.fetchall()
+    for x in myresult:
+        dev = x[0]
     details_age = collection.find({'_id': login_email}, {'Alder': 1, '_id': 0})
     for alder in details_age:
         age = alder['Alder']
