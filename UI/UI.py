@@ -25,21 +25,26 @@ master.title('Project')
 #Funktioner
 #Definere funktion for kunde oprettelse
 def finish_reg():
+    global reg
+    reg = StringVar()
     email = temp_email.get() #Definere variabler, som information som systemet får af kunden ved hjælp af .get() funktion
     first_name = temp_firstname.get()
     last_name = temp_lastname.get()
     password = temp_password.get()
-
-    #if email == "" or first_name == "" or last_name == "" or password == "": #Sikre kunden udfylder alle felter.
-        #notif.config(fg="red",text="Please udfyld alle oplysninger * ") #Hvis et af felterne er tomme, skrives dette til kunden
-        #return
-    #if collection.find_one({'email': email}): #sikre at kunden ikke allerede eksistere i systemet. Dette gøres ved hjælp af find_one, på id's
-       # notif.config(fg="red",text="Account eksisterer allerede")
-        #return
-    #else:
-    mycursor.execute("INSERT INTO user (first_name, last_name, email, password) VALUES (%s,%s,%s,%s)", (first_name, last_name, email, password))
-    db.commit()
-    notif.config(fg="green", text="Bruger oprettet")
+    mycursor.execute("SELECT email FROM user")
+    myreg = mycursor.fetchall()
+    for registrer in myreg:
+        reg = registrer[0]
+    if email == "" or first_name == "" or last_name == "" or password == "": #Sikre kunden udfylder alle felter.
+        notif.config(fg="red",text="Please udfyld alle oplysninger * ") #Hvis et af felterne er tomme, skrives dette til kunden
+        return
+    if email == reg: #sikre at kunden ikke allerede eksistere i systemet. Dette gøres ved hjælp af find_one, på id's
+       notif.config(fg="red",text="Email already used")
+       return
+    else:
+        mycursor.execute("INSERT INTO user (first_name, last_name, email, password) VALUES (%s,%s,%s,%s)", (first_name, last_name, email, password))
+        db.commit()
+        notif.config(fg="green", text="Bruger oprettet")
 
 #Ny variable defineres som register
 def register():
@@ -89,9 +94,13 @@ def clock():
     digi_clock.pack()
     
 
-
 def login_session():
     global login_email
+    global temp_device
+    global Device_dashboard
+    global dev
+    dev = StringVar()
+    temp_device = StringVar()
     login_email = temp_login_email.get()
     login_password = temp_login_password.get()
     #Cpr nummer skal stemme overens med et id, og med Password
@@ -108,18 +117,26 @@ def login_session():
         #Finder denne kundes navn, ved hjælp af cpr nummer
         #Åbner en ny skærm efter login er successfuldt 
         login_screen.destroy()
-        account_dashboard = Toplevel(master)
-        account_dashboard.title('Dashboard')
-        #opretter labels på denne skærm
-        Label(account_dashboard, text="Account oversigt",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
-        Label(account_dashboard, text="Velkommen til din profil",font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
-        #Opretter 3 knapper
-        #Button(account_dashboard, text="Profil", image = profilimage,command=personal_details).grid(row=3, sticky=N)
-        Button(account_dashboard, text="Stocks",command=AllStocks,font=('Calibri',12),width=30).grid(row=4,sticky=N,padx=10)
-        Button(account_dashboard, text="Clock", command=clock,font=('Calibri',12),width=30).grid(row=5,sticky=N,padx=10)
+        Device_dashboard = Toplevel(master)
+        Device_dashboard.title('Choose your device')
+        Label(Device_dashboard, text="Type your device details in here: ", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
+        Label(Device_dashboard, text="Mac Adress:", font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
+        Entry(Device_dashboard, textvariable=temp_device) .grid(row=1, column=1,padx=5)
+        Button(Device_dashboard, text="Submit", command=userprofil).grid(row=1, column=2,padx=5)
     else:
         #Hvis login ikke er successfuldt
         login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
+
+
+def userprofil():
+    Device_dashboard.destroy()
+    User_dashboard = Toplevel(master)
+    User_dashboard.title('Choose your device')
+    Label(User_dashboard, text="Account oversigt",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
+    Label(User_dashboard, text="Velkommen til din profil",font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
+    #Button(User_dashboard, text="Profil", image = profilimage,command=personal_details).grid(row=3, sticky=N)
+    Button(User_dashboard, text="Stocks",command=AllStocks,font=('Calibri',12),width=30).grid(row=4,sticky=N,padx=10)
+    Button(User_dashboard, text="Clock", command=clock,font=('Calibri',12),width=30).grid(row=5,sticky=N,padx=10)
 
 def AppleStock():
     #Vi får fat i aktie data
