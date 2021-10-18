@@ -9,10 +9,10 @@ DROP TABLE IF EXISTS waaseteam2.device_type;
 
 CREATE TABLE user (
 ID INT NOT NULL AUTO_INCREMENT,
-first_name VARCHAR(255),
-last_name VARCHAR(255),
-email VARCHAR(255),
-password VARCHAR(255),
+first_name VARCHAR(255) NOT NULL,
+last_name VARCHAR(255) NOT NULL,
+email VARCHAR(255) NOT NULL,
+password VARCHAR(255) NOT NULL,
 last_updated TIMESTAMP DEFAULT now(),
 PRIMARY KEY (ID)
 ) AUTO_INCREMENT = 0;
@@ -21,14 +21,14 @@ PRIMARY KEY (ID)
 
 CREATE TABLE device_type (
 ID INT NOT NULL AUTO_INCREMENT,
-model VARCHAR(255),
+model VARCHAR(255) NOT NULL,
 PRIMARY KEY (ID)
 ) AUTO_INCREMENT = 0;
 
 
 CREATE TABLE device (
 MAC_address VARCHAR(17) NOT NULL ,
-device_password VARCHAR(255),
+device_password VARCHAR(255) NOT NULL,
 device_type_ID INT NOT NULL,
 user_ID_device INT NOT NULL,
 last_updated TIMESTAMP DEFAULT now(),
@@ -40,7 +40,7 @@ FOREIGN KEY (user_ID_device) REFERENCES user(ID)
 
 CREATE TABLE data_type (
 ID INT NOT NULL AUTO_INCREMENT,
-data_category VARCHAR(255),
+data_category VARCHAR(255) NOT NULL,
 PRIMARY KEY (ID)
 ) AUTO_INCREMENT = 0;
 
@@ -49,7 +49,7 @@ CREATE TABLE input_data (
 user_ID_data INT NOT NULL,
 device_ID VARCHAR(17) NOT NULL,
 data_type_ID INT NOT NULL,
-input VARCHAR(255),
+input VARCHAR(255) NOT NULL,
 entry_time TIMESTAMP DEFAULT now(),
 FOREIGN KEY (user_ID_data) REFERENCES user(ID),
 FOREIGN KEY (device_ID) REFERENCES device(MAC_address),
