@@ -18,10 +18,12 @@ blue = (0, 0, 255)
 red = (100, 0, 70)
 green = (0, 150, 100)
 black = (0, 0, 0)
+yellow = (180, 180, 100)
 b = blue
 r = red
 g = green
 n = black
+y = yellow
 
 
 host = ""
@@ -126,6 +128,16 @@ def return_data(eth_mac, url):
                
             if str(dataB) == 'R':
                 screen_outputs.right()
+        elif data_type == 3:
+            tt = int(dataB[-1:])
+            ss = int(dataB[-2:])
+            mm = int(dataB[3:5])
+            hh = int(dataB[0:2])
+            print(ss)
+            print(mm)
+            print(hh)
+            screen_outputs.watch(hh,mm,ss,tt)
+            
         
         if str(dataB) == 'Q':
             print('EXIT!')

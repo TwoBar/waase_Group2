@@ -91,6 +91,7 @@ def clock():
         display_time = time.strftime("%H:%M:%S")
         digi_clock.config(text=display_time)
         digi_clock.after(200,present_time)
+        create_data(3, display_time)
     present_time()
     digi_clock.pack()
     
@@ -139,15 +140,13 @@ def login_session():
             #Hvis login ikke er successfuldt
             login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
 
-def create_data():
+def create_data(dtype, dinput):
     try:
-        print(device)
-        print(user_id)
-        mycursor.execute("INSERT INTO input_data (user_ID_data, device_ID, data_type_ID, input) VALUES (%s, %s, %s, %s)", (str(user_id), str(device), 1, 'on!'))
+        mycursor.execute("INSERT INTO input_data (user_ID_data, device_ID, data_type_ID, input) VALUES (%s, %s, %s, %s)", (str(user_id), str(device), dtype, dinput))
         db.commit()
     except mysql.connector.errors.IntegrityError as err:
         print(err)
-        mycursor.execute("Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s", ('on!', 1, str(user_id)))
+        mycursor.execute("Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s", (dinput, dtype, str(user_id)))
         db.commit()
 
 
@@ -164,7 +163,7 @@ def userprofil(mac):
     except mysql.connector.errors.IntegrityError as err:
         print(err)
 
-    create_data()
+    create_data(1, 'on')
     User_dashboard = Toplevel(master)
     User_dashboard.title('Choose your device')
     Label(User_dashboard, text="Account oversigt",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
