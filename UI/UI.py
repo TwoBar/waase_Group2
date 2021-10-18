@@ -7,6 +7,7 @@ from mysql.connector import cursor
 import pandas_datareader as web
 import matplotlib.pyplot as plt
 from yahoo_fin import stock_info
+from functools import partial
 
 
 #Connecter til database Kunder, hvis den ikke eksistere, opretter den en ny
@@ -120,10 +121,18 @@ def login_session():
             Device_dashboard = Toplevel(master)
             Device_dashboard.title('Choose your device')
             Label(Device_dashboard, text="Type your device details in here: ", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-            Label(Device_dashboard, text="Mac Adress:", font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
+            Label(Device_dashboard, text="Add new Mac Adress:", font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
             Entry(Device_dashboard, textvariable=temp_device) .grid(row=1, column=1,padx=5)
+            mycursor.execute("SELECT * FROM device")
+            myresult = mycursor.fetchall()
+            rownum = 2
+            for x in myresult:
+                if user_id == x[3]:
+                    Button(Device_dashboard, text=x[0], command=partial(userprofil, x[0])).grid(row=rownum, sticky=N, padx=10)
+                    rownum = rownum + 1
 
-            Button(Device_dashboard, text="Submit", command=userprofil).grid(row=1, column=2,padx=5)
+            Button(Device_dashboard, text="Submit", command=partial(userprofil, '')).grid(row=1, column=2,padx=5)
+
 
 
         else:
@@ -143,15 +152,18 @@ def create_data():
 
 
 
-def userprofil():
+def userprofil(mac):
     global device
-    device = temp_device.get()
+    device = mac
+    if device == '':
+        device = temp_device.get()
     Device_dashboard.destroy()
     try:
         mycursor.execute("INSERT INTO device (MAC_address, device_password, device_type_ID, user_ID_device) VALUES (%s, %s, %s, %s)", (str(device),'1234', 1, str(user_id)))
         db.commit()
     except mysql.connector.errors.IntegrityError as err:
         print(err)
+
     create_data()
     User_dashboard = Toplevel(master)
     User_dashboard.title('Choose your device')
