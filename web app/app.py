@@ -34,7 +34,7 @@ def mac():
                     print(data)
                     data.clear()
                     print(data)
-                    return jsonify(message=y[3])
+                    return jsonify(message=y[3], data_type=y[2])
 
     return jsonify(message="Mac not found:" + mac)
 
