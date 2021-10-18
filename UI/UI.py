@@ -92,14 +92,26 @@ def clock():
         digi_clock.after(200,present_time)
     present_time()
     digi_clock.pack()
-    
+
+def directions():
+     global notif
+     # Personal Details Screen
+     directions_screen = Toplevel(master)
+     directions_screen.title('Directions')
+     # Buttons
+     notif = Label(directions_screen, font=('Calibri', 12))
+     notif.grid(row=2, sticky=N, pady=10)
+     Button(directions_screen, text="UP", image=UPimage, command=UP).grid(row=0, column=1)
+     Button(directions_screen, text="LEFT", image=LEFTimage, command=LEFT).grid(row=1, column=0)
+     Button(directions_screen, text="DOWN", image=DOWNimage, command=DOWN).grid(row=1, column=1)
+     Button(directions_screen, text="RIGHT", image=RIGHTimage, command=RIGHT).grid(row=1, column=2)
+
 
 def login_session():
     global login_email
     global temp_device
     global Device_dashboard
-    global dev
-    dev = StringVar()
+    global user_id
     temp_device = StringVar()
     login_email = temp_login_email.get()
     login_password = temp_login_password.get()
@@ -107,25 +119,18 @@ def login_session():
     mycursor.execute("SELECT email FROM user")
     myresult = mycursor.fetchall()
     for x in myresult:
-        dev = x[0]
-    mycursor.execute("SELECT password FROM user")
-    results = mycursor.fetchall()
-    for pssw in results:
-        pss = pssw[0]
-    if login_email == dev and login_password == pss:
-            
-        #Finder denne kundes navn, ved hjælp af cpr nummer
-        #Åbner en ny skærm efter login er successfuldt 
-        login_screen.destroy()
-        Device_dashboard = Toplevel(master)
-        Device_dashboard.title('Choose your device')
-        Label(Device_dashboard, text="Type your device details in here: ", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-        Label(Device_dashboard, text="Mac Adress:", font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
-        Entry(Device_dashboard, textvariable=temp_device) .grid(row=1, column=1,padx=5)
-        Button(Device_dashboard, text="Submit", command=userprofil).grid(row=1, column=2,padx=5)
+         if login_email == x[3] and login_password == x[4]:
+             user_id = x[0]
+             login_screen.destroy()
+             Device_dashboard = Toplevel(master)
+             Device_dashboard.title('Choose your device')
+             Label(Device_dashboard, text="Type your device details in here: ", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
+             Label(Device_dashboard, text="Mac Adress:", font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
+             Entry(Device_dashboard, textvariable=temp_device) .grid(row=1, column=1,padx=5)
+             Button(Device_dashboard, text="Submit", command=userprofil).grid(row=1, column=2,padx=5)
+             mycursor.execute("INSERT INTO device (Mac_Adress ")
     else:
-        #Hvis login ikke er successfuldt
-        login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
+            login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
 
 
 def userprofil():
@@ -137,6 +142,7 @@ def userprofil():
     #Button(User_dashboard, text="Profil", image = profilimage,command=personal_details).grid(row=3, sticky=N)
     Button(User_dashboard, text="Stocks",command=AllStocks,font=('Calibri',12),width=30).grid(row=4,sticky=N,padx=10)
     Button(User_dashboard, text="Clock", command=clock,font=('Calibri',12),width=30).grid(row=5,sticky=N,padx=10)
+    Button(User_dashboard, text="Directions", command=directions, font=('Calibri', 12), width=30).grid(row=6, sticky=N, padx=10)
 
 def AppleStock():
     #Vi får fat i aktie data
@@ -182,30 +188,39 @@ def FacebookStock():
     plt.ylabel('Close Price USD ($)', fontsize=18)
     plt.show()
 
-#def personal_details():
-    #Definere de foskellige columns i databasen som variabler
-    mycursor.execute("SELECT email FROM user where ")
-    myresult = mycursor.fetchall()
-    for x in myresult:
-        dev = x[0]
-    details_age = collection.find({'_id': login_email}, {'Alder': 1, '_id': 0})
-    for alder in details_age:
-        age = alder['Alder']
-    details_gender = collection.find({'_id': login_email}, {'Gender': 1, '_id': 0})
-    for gender in details_gender:
-        gen = gender['Gender']
-    details_balance = collection.find({'_id': login_email}, {'Balance': 1, '_id': 0})
-    for balance in details_balance:
-        penge = balance['Balance']
-    #Personal Details Screen
-    personal_details_screen = Toplevel(master)
-    personal_details_screen.title('Personal Details')
-    #Labels
-    Label(personal_details_screen, text="Personlige oplysninger",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
-    Label(personal_details_screen, text="Navn : "+name,font=('Calibri',12)).grid(row=1, sticky=W)
-    Label(personal_details_screen, text="Alder : "+age,font=('Calibri',12)).grid(row=2, sticky=W)
-    Label(personal_details_screen, text="Gender : "+gen,font=('Calibri',12)).grid(row=3, sticky=W)
-    Label(personal_details_screen, text="Balance : "+str(penge)+"DKK",font=('Calibri',12)).grid(row=4, sticky=W)
+def UP():
+     global user_id
+     query = """Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s"""
+     tuple1 = ('W', 2, user_id)
+     mycursor.execute(query, tuple1)
+     db.commit()
+     notif.config(fg="green", text="UP!")
+
+def LEFT():
+     global user_id
+     query = """Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s"""
+     tuple1 = ('L', 2, user_id)
+     mycursor.execute(query, tuple1)
+     db.commit()
+     notif.config(fg="green", text="LEFT!")
+
+def DOWN():
+     global user_id
+     query = """Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s"""
+     tuple1 = ('D', 2, user_id)
+     mycursor.execute(query, tuple1)
+     db.commit()
+     notif.config(fg="green", text="DOWN!")
+
+
+def RIGHT():
+     global user_id
+     query = """Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s"""
+     tuple1 = ('R', 2, user_id)
+     mycursor.execute(query, tuple1)
+     db.commit()
+     notif.config(fg="green", text="RIGHT!")
+
 def login():
     #variabler
     global temp_login_email
@@ -285,6 +300,22 @@ Amazonimage = ImageTk.PhotoImage(Amazonimage)
 Stocksimage = Image.open('stocks.png')
 Stocksimage = Stocksimage.resize((150,150))
 Stocksimage = ImageTk.PhotoImage(Stocksimage)
+
+UPimage = Image.open('UP.png')
+UPimage = UPimage.resize((150,150))
+UPimage = ImageTk.PhotoImage(UPimage)
+
+LEFTimage = Image.open('LEFT.png')
+LEFTimage = LEFTimage.resize((150,150))
+LEFTimage = ImageTk.PhotoImage(LEFTimage)
+
+DOWNimage = Image.open('DOWN.png')
+DOWNimage = DOWNimage.resize((150,150))
+DOWNimage = ImageTk.PhotoImage(DOWNimage)
+
+RIGHTimage = Image.open('RIGHT.png')
+RIGHTimage = RIGHTimage.resize((150,150))
+RIGHTimage = ImageTk.PhotoImage(RIGHTimage)
 
 #Labels
 Label(master, text = "Group x", font=('Calibri',14)).grid(row=0,sticky=N,pady=10)
