@@ -96,12 +96,14 @@ def clock():
 
 def login_session():
     global login_email
-    global temp_device
+
     global Device_dashboard
     global dev
     global user_id
-    dev = StringVar()
+    global temp_device
     temp_device = StringVar()
+    dev = StringVar()
+
     login_email = temp_login_email.get()
     login_password = temp_login_password.get()
     #Cpr nummer skal stemme overens med et id, og med Password
@@ -110,7 +112,8 @@ def login_session():
     for x in myresult:
         if login_email == x[3] and login_password == x[4]:
             user_id = x[0]
-            
+
+
             #Finder denne kundes navn, ved hjælp af cpr nummer
             #Åbner en ny skærm efter login er successfuldt
             login_screen.destroy()
@@ -119,14 +122,37 @@ def login_session():
             Label(Device_dashboard, text="Type your device details in here: ", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
             Label(Device_dashboard, text="Mac Adress:", font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
             Entry(Device_dashboard, textvariable=temp_device) .grid(row=1, column=1,padx=5)
+
             Button(Device_dashboard, text="Submit", command=userprofil).grid(row=1, column=2,padx=5)
+
+
         else:
             #Hvis login ikke er successfuldt
             login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
 
+def create_data():
+    try:
+        print(device)
+        print(user_id)
+        mycursor.execute("INSERT INTO input_data (user_ID_data, device_ID, data_type_ID, input) VALUES (%s, %s, %s, %s)", (str(user_id), str(device), 1, 'on!'))
+        db.commit()
+    except mysql.connector.errors.IntegrityError as err:
+        print(err)
+        mycursor.execute("Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s", ('on!', 1, str(user_id)))
+        db.commit()
+
+
 
 def userprofil():
+    global device
+    device = temp_device.get()
     Device_dashboard.destroy()
+    try:
+        mycursor.execute("INSERT INTO device (MAC_address, device_password, device_type_ID, user_ID_device) VALUES (%s, %s, %s, %s)", (str(device),'1234', 1, str(user_id)))
+        db.commit()
+    except mysql.connector.errors.IntegrityError as err:
+        print(err)
+    create_data()
     User_dashboard = Toplevel(master)
     User_dashboard.title('Choose your device')
     Label(User_dashboard, text="Account oversigt",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
