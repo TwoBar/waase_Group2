@@ -36,12 +36,13 @@ def finish_reg():
     myreg = mycursor.fetchall()
     for registrer in myreg:
         reg = registrer[0]
+        if email == reg:  # sikre at kunden ikke allerede eksistere i systemet. Dette gøres ved hjælp af find_one, på id's
+            notif.config(fg="red", text="Email already used")
+            return
     if email == "" or first_name == "" or last_name == "" or password == "": #Sikre kunden udfylder alle felter.
         notif.config(fg="red",text="Please udfyld alle oplysninger * ") #Hvis et af felterne er tomme, skrives dette til kunden
         return
-    if email == reg: #sikre at kunden ikke allerede eksistere i systemet. Dette gøres ved hjælp af find_one, på id's
-       notif.config(fg="red",text="Email already used")
-       return
+
     else:
         mycursor.execute("INSERT INTO user (first_name, last_name, email, password) VALUES (%s,%s,%s,%s)", (first_name, last_name, email, password))
         db.commit()
@@ -259,15 +260,10 @@ def FacebookStock():
 
 
 def UP():
-    global user_id
-    query = """Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s"""
-    tuple1 = ('W', 2, user_id)
-    mycursor.execute(query, tuple1)
-    db.commit()
+    create_data(2, 'W')
     notif.config(fg="green", text="UP!")
 
 def LEFT():
-    global user_id
     query = """Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s"""
     tuple1 = ('L', 2, user_id)
     mycursor.execute(query, tuple1)
@@ -275,7 +271,6 @@ def LEFT():
     notif.config(fg="green", text="LEFT!")
 
 def DOWN():
-    global user_id
     query = """Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s"""
     tuple1 = ('D', 2, user_id)
     mycursor.execute(query, tuple1)
@@ -284,12 +279,12 @@ def DOWN():
 
 
 def RIGHT():
-    global user_id
     query = """Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s"""
     tuple1 = ('R', 2, user_id)
     mycursor.execute(query, tuple1)
     db.commit()
     notif.config(fg="green", text="RIGHT!")
+
 def login():
     #variabler
     global temp_login_email
@@ -331,6 +326,7 @@ def AllStocks():
      
         price = stock_info.get_live_price(e1.get())
         Current_stock.set(price)
+        create_data(1, str(price))
  
     result2 = Label(AllStocks_screen, text="", textvariable=Current_stock).grid(row=6, column=1, sticky=W)
  
