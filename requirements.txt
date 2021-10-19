@@ -1,0 +1,4 @@
+pip install Pillow
+pip install mysql
+pip install mysql.connector
+pip install pandas-datareader==0.10.0

@@ -4,7 +4,7 @@ import time
 from PIL import ImageTk, Image
 import mysql.connector
 from mysql.connector import cursor
-import pandas_datareader as web
+
 import matplotlib.pyplot as plt
 from yahoo_fin import stock_info
 
