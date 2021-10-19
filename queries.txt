@@ -1,0 +1,20 @@
+INSERT INTO input_data (user_ID_data, device_ID, data_type_ID, input)
+VALUES (e4:5f:01:41:e1:69 , 1, 1, 'sex-fuck');SELECT * FROM waaseteam2.input_data;
+
+INSERT INTO device (MAC_address, device_password, device_type_ID, user_ID_device)
+VALUES ('e4:5f:01:41:e1:6a', 'test', 1, 2);SELECT * FROM waaseteam2.device;
+
+UPDATE device
+SET MAC_address = 'e4:5f:01:41:e1:6a'
+WHERE user_ID_device = 1;
+
+UPDATE input_data
+SET input = 'Q'
+WHERE user_ID_data = 1;
+
+INSERT INTO data_type (ID, data_category)
+VALUES (1, 'string');
+INSERT INTO data_type (ID, data_category)
+VALUES (2, 'directions');
+INSERT INTO data_type (ID, data_category)
+VALUES (3, 'watch');
