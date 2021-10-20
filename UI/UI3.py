@@ -10,7 +10,6 @@ from yahoo_fin import stock_info
 from functools import partial
 
 
-
 #Connecter til database Kunder, hvis den ikke eksistere, opretter den en ny
 db = mysql.connector.connect(
     host="waaseteam2.mysql.database.azure.com",
@@ -556,8 +555,6 @@ def screen_plot_letter_1(x):
     x.clear()
 
 
-
-
 def finish_reg():
     global reg
     reg = StringVar()
@@ -648,6 +645,8 @@ def login_session():
     for x in myresult:
         if login_email == x[3] and login_password == x[4]:
             user_id = x[0]
+            global ui_screen
+
 
 
             #Finder denne kundes navn, ved hjælp af cpr nummer
@@ -667,6 +666,8 @@ def login_session():
                     rownum = rownum + 1
 
             Button(Device_dashboard, text="Submit", command=partial(userprofil, '')).grid(row=1, column=2,padx=5)
+            ui_screen = Toplevel(master)
+            show_data(1, '         ')
 
 
 
@@ -675,10 +676,9 @@ def login_session():
             login_notif.config(fg="red", text="Ingen bruger fundet med denne kombination *")
 
 def create_data(dtype, dinput):
-    global ui_screen
-    ui_screen = Toplevel(master)
 
-    show_data(dtype, dinput +'     ')
+
+
     try:
         mycursor.execute("INSERT INTO input_data (user_ID_data, device_ID, data_type_ID, input) VALUES (%s, %s, %s, %s)", (str(user_id), str(device), dtype, dinput))
         db.commit()
@@ -686,7 +686,8 @@ def create_data(dtype, dinput):
         print(err)
         mycursor.execute("Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s", (dinput, dtype, str(user_id)))
         db.commit()
-    ui_screen.after(3000, lambda: ui_screen.destroy())
+    show_data(dtype, '     ' + dinput + '     ')
+
 
 
 
