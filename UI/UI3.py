@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from yahoo_fin import stock_info
 from functools import partial
 
+global screen
 
 #Connecter til database Kunder, hvis den ikke eksistere, opretter den en ny
 db = mysql.connector.connect(
@@ -555,6 +556,12 @@ def screen_plot_letter_1(x):
     x.clear()
 
 
+def activate_screen():
+    global ui_screen
+    global screen
+    ui_screen = Toplevel(master)
+    screen = 1
+
 def finish_reg():
     global reg
     reg = StringVar()
@@ -642,10 +649,13 @@ def login_session():
     #Cpr nummer skal stemme overens med et id, og med Password
     mycursor.execute("SELECT * FROM user")
     myresult = mycursor.fetchall()
+
     for x in myresult:
         if login_email == x[3] and login_password == x[4]:
             user_id = x[0]
-            global ui_screen
+            global screen
+            screen = 0
+
 
 
 
@@ -657,6 +667,8 @@ def login_session():
             Label(Device_dashboard, text="Type your device details in here: ", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
             Label(Device_dashboard, text="Add new Mac Adress:", font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
             Entry(Device_dashboard, textvariable=temp_device) .grid(row=1, column=1,padx=5)
+
+            Button(Device_dashboard, text="Screen", command=activate_screen, font=('Calibri', 12), width=30).grid(row=6,sticky=N, padx=10)
             mycursor.execute("SELECT * FROM device")
             myresult = mycursor.fetchall()
             rownum = 2
@@ -666,7 +678,7 @@ def login_session():
                     rownum = rownum + 1
 
             Button(Device_dashboard, text="Submit", command=partial(userprofil, '')).grid(row=1, column=2,padx=5)
-            ui_screen = Toplevel(master)
+
             show_data(1, '         ')
 
 
@@ -686,7 +698,8 @@ def create_data(dtype, dinput):
         print(err)
         mycursor.execute("Update input_data set input = %s, data_type_ID = %s where user_ID_data = %s", (dinput, dtype, str(user_id)))
         db.commit()
-    show_data(dtype, '     ' + dinput + '     ')
+    if dtype == 1 and screen == 1:
+        show_data(dtype, '     ' + dinput + '     ')
 
 
 
@@ -712,6 +725,7 @@ def userprofil(mac):
     Button(User_dashboard, text="Stocks",command=AllStocks,font=('Calibri',12),width=30).grid(row=4,sticky=N,padx=10)
     Button(User_dashboard, text="Clock", command=clock,font=('Calibri',12),width=30).grid(row=5,sticky=N,padx=10)
     Button(User_dashboard, text="Directions", command=directions, font=('Calibri', 12), width=30).grid(row=6,sticky=N,padx=10)
+
 
 def directions():
     global notif
@@ -771,6 +785,9 @@ def FacebookStock():
     plt.xlabel('Date', fontsize=18)
     plt.ylabel('Close Price USD ($)', fontsize=18)
     plt.show()
+
+
+
 
 #def personal_details():
     #Definere de foskellige columns i databasen som variabler
