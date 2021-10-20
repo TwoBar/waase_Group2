@@ -1,0 +1,12 @@
+API
+
+Azure DB
+
+Initially our plan was to have Azure host our MySQL database as well as our API which allows a wireless connection between the web interface, a MySQL server (workbench) and an external device. For the sake of efficiency this would have been the most optimal solution. Essential we wanted to manage the API (API management) and other resources like our database in Azure using python and the development portal from Contoso.
+
+We decided that Contoso would host the API as opposed to running it on a local host; the API Management service includes an integrated manager developer portal which would enable us to self-host the API. After creating a Azure app, function app and API on Azure we made an attempt to deploy the API and publish it but was unable due to subscription limitations and no access to the active directory.  Afterwards time was spent on research for alternatives to host our API, which set the group back timewise (3 hours per day for a week).
+
+
+Ngrok
+
+During our research we found Redhat 3Scale API management which had a 30 day trial and studied how to use it properly. Shortly after we discovered Ngrok. The cross-platform application provides a safe URL for our localhost by creating a tunnel (HTTP/TCP) to the local server of our machine. The public URL gives us SSH access to the Raspberry Pi.
