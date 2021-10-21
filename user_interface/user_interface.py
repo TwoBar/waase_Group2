@@ -26,7 +26,7 @@ mycursor = db.cursor()
 #Åbner vores gui - Main Screen, og kalder den Bank App 
 master = Tk()
 master.title('Project')
-
+master.configure(background='black')
 #Funktioner
 #Definere funktion for kunde oprettelse
 
@@ -92,13 +92,14 @@ def register():
     #Åbner login skærmen
     register_screen = Toplevel(master)
     register_screen.title('Register')
+    register_screen.configure(background='black')
 
     #Laver labels på skærmen
-    Label(register_screen, text="Udfyldt dine detaljer her, for at opret dig", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-    Label(register_screen, text="Email", font=('Calibri',12)).grid(row=1,sticky=W)
-    Label(register_screen, text="First name", font=('Calibri',12)).grid(row=2,sticky=W)
-    Label(register_screen, text="Last name", font=('Calibri',12)).grid(row=3,sticky=W)
-    Label(register_screen, text="Password", font=('Calibri',12)).grid(row=4,sticky=W)
+    Label(register_screen, text="Udfyldt dine detaljer her, for at opret dig", bg='black', fg='white', font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
+    Label(register_screen, text="Email", bg='black', fg='white', font=('Calibri',12)).grid(row=1,sticky=W)
+    Label(register_screen, text="First name", bg='black', fg='white', font=('Calibri',12)).grid(row=2,sticky=W)
+    Label(register_screen, text="Last name", bg='black', fg='white', font=('Calibri',12)).grid(row=3,sticky=W)
+    Label(register_screen, text="Password", bg='black', fg='white', font=('Calibri',12)).grid(row=4,sticky=W)
     notif = Label(register_screen, font=('Calibri',12))
     notif.grid(row=7,sticky=N,pady=10)    
 
@@ -109,7 +110,7 @@ def register():
     Entry(register_screen, textvariable=temp_password,show="*") .grid(row=4, column=1,padx=5)
 
     #Opretter en knap som hedder "Registrer"
-    Button(register_screen, text="Registrer", command = finish_reg, font=('Calibri',12)).grid(row=6, sticky=N,pady=10)
+    Button(register_screen, text="Registrer", command = finish_reg, bg='black', fg='white', font=('Calibri',12)).grid(row=6, sticky=N,pady=10)
     #Definere ny variable for hvis kunden vil logge ind
 
 def clock():
@@ -154,9 +155,10 @@ def login_session():
             #Åbner en ny skærm efter login er successfuldt
             login_screen.destroy()
             Device_dashboard = Toplevel(master)
+            Device_dashboard.configure(background='black')
             Device_dashboard.title('Choose your device')
-            Label(Device_dashboard, text="Type your device details in here: ", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-            Label(Device_dashboard, text="Add new Mac Adress:", font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
+            Label(Device_dashboard, text="Type your device details in here: ", bg='black', fg='white', font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
+            Label(Device_dashboard, text="Add new Mac Adress:", bg='black', fg='white', font=('Calibri',12)).grid(row=1,sticky=N,pady=10)
             Entry(Device_dashboard, textvariable=temp_device) .grid(row=1, column=1,padx=5)
 
             mycursor.execute("SELECT * FROM device")
@@ -164,10 +166,10 @@ def login_session():
             rownum = 2
             for x in myresult:
                 if user_id == x[3]:
-                    Button(Device_dashboard, text=x[0], command=partial(userprofil, x[0])).grid(row=rownum, sticky=N, padx=10)
+                    Button(Device_dashboard, text=x[0], bg='black', fg='white', command=partial(userprofil, x[0])).grid(row=rownum, sticky=N, padx=10)
                     rownum = rownum + 1
 
-            Button(Device_dashboard, text="Submit", command=partial(userprofil, '')).grid(row=1, column=2,padx=5)
+            Button(Device_dashboard, text="Submit", bg='black', fg='white', command=partial(userprofil, '')).grid(row=1, column=2,padx=5)
 
         else:
             #Hvis login ikke er successfuldt
@@ -198,14 +200,15 @@ def userprofil(mac):
         print(err)
 
     User_dashboard = Toplevel(master)
-    User_dashboard.title('Choose your device')
-    Label(User_dashboard, text="Account oversigt",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
-    Label(User_dashboard, text="Velkommen til din profil",font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
-    Button(User_dashboard, text="Profil", image =profilimage,command=personal_details).grid(row=3, sticky=N)
-    Button(User_dashboard, text="Stocks",command=AllStocks,font=('Calibri',12),width=30).grid(row=4,sticky=N,padx=10)
-    Button(User_dashboard, text="Clock", command=clock,font=('Calibri',12),width=30).grid(row=5,sticky=N,padx=10)
-    Button(User_dashboard, text="Directions", command=directions, font=('Calibri', 12), width=30).grid(row=6,sticky=N,padx=10)
-    Button(User_dashboard, text='Screen on/off', font=('Calibri', 12), width=20, command=activate_screen).grid(row=7, sticky=N, pady=10)
+    User_dashboard.title('Data Portal')
+    User_dashboard.configure(background='black')
+    Label(User_dashboard, text="Account oversigt", bg='black', fg='white', font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
+    Label(User_dashboard, text="Velkommen til din profil", bg='black', fg='white', font=('Calibri',12)).grid(row=1, sticky=N,pady=5)
+    Button(User_dashboard, text="Profil", bg='black', fg='white', image =profilimage,command=personal_details).grid(row=3, sticky=N)
+    Button(User_dashboard, text="Stocks", bg='black', fg='white',command=AllStocks,font=('Calibri',12),width=30).grid(row=4,sticky=N,padx=10)
+    Button(User_dashboard, text="Clock", bg='black', fg='white', command=clock,font=('Calibri',12),width=30).grid(row=5,sticky=N,padx=10)
+    Button(User_dashboard, text="Directions", bg='black', fg='white', command=directions, font=('Calibri', 12), width=30).grid(row=6,sticky=N,padx=10)
+    Button(User_dashboard, text='Screen on/off', bg='black', fg='white', font=('Calibri', 12), width=20, command=activate_screen).grid(row=7, sticky=N, pady=10)
     create_data(1, 'on')
 
 def directions():
@@ -214,6 +217,7 @@ def directions():
     directions_screen = Toplevel(master)
     directions_screen.title('Directions')
     # Buttons
+    directions_screen.configure(background='black')
     notif = Label(directions_screen, font=('Calibri', 12))
     notif.grid(row=2, sticky=N, pady=10)
     Button(directions_screen, text="UP", image=UPimage, command=UP).grid(row=0, column=1)
@@ -279,12 +283,13 @@ def personal_details():
     #Personal Details Screen
     personal_details_screen = Toplevel(master)
     personal_details_screen.title('Personal Details')
+    personal_details_screen.configure(background='black')
     #Labels
-    Label(personal_details_screen, text="Personal Details",font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
-    Label(personal_details_screen, text="Name: "+name,font=('Calibri',12)).grid(row=1, sticky=W)
-    Label(personal_details_screen, text="Lastname : " + lastname, font=('Calibri', 12)).grid(row=2, sticky=W)
-    Label(personal_details_screen, text="Email : "+email,font=('Calibri',12)).grid(row=3, sticky=W)
-    Label(personal_details_screen, text="Password : "+password,font=('Calibri',12)).grid(row=4, sticky=W)
+    Label(personal_details_screen, text="Personal Details", bg='black', fg='white',font=('Calibri',12)).grid(row=0, sticky=N,pady=10)
+    Label(personal_details_screen, text="Name: "+name, bg='black', fg='white',font=('Calibri',12)).grid(row=1, sticky=W)
+    Label(personal_details_screen, text="Lastname : " + lastname,  bg='black', fg='white', font=('Calibri', 12)).grid(row=2, sticky=W)
+    Label(personal_details_screen, text="Email : "+email, bg='black', fg='white', font=('Calibri',12)).grid(row=3, sticky=W)
+    Label(personal_details_screen, text="Password : "+password, bg='black', fg='white', font=('Calibri',12)).grid(row=4, sticky=W)
 
 def UP():
     create_data(2, 'W')
@@ -310,17 +315,18 @@ def login():
     #Login Screen
     login_screen = Toplevel(master)
     login_screen.title('Login')
+    login_screen.configure(background='black')
     #Labels
-    Label(login_screen, text="Login til din account", font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
-    Label(login_screen, text="Email", font=('Calibri',12)).grid(row=1,sticky=W,pady=10)
-    Label(login_screen, text="Password", font=('Calibri',12)).grid(row=2,sticky=W,pady=10)
-    login_notif = Label(login_screen, font=('Calibri',12))
+    Label(login_screen, text="Login til din account", bg='black', fg='white', font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
+    Label(login_screen, text="Email", bg='black', fg='white', font=('Calibri',12)).grid(row=1,sticky=W,pady=10)
+    Label(login_screen, text="Password", bg='black', fg='white', font=('Calibri',12)).grid(row=2,sticky=W,pady=10)
+    login_notif = Label(login_screen, bg='black', font=('Calibri',12))
     login_notif.grid(row=4,sticky=N)
     #Entry
     Entry(login_screen, textvariable=temp_login_email).grid(row=1,column=1,padx=5)
     Entry(login_screen, textvariable=temp_login_password,show='*').grid(row=2,column=1,padx=5)
     #Button
-    Button(login_screen, text="Login", command=login_session, width=15,font=('Calibri',12)).grid(row=3,sticky=W,pady=5,padx=5)
+    Button(login_screen, text="Login", command=login_session, bg='black', fg='white', width=15,font=('Calibri',12)).grid(row=3,sticky=W,pady=5,padx=5)
 
 def AllStocks():
     Current_stock = StringVar()
@@ -328,12 +334,13 @@ def AllStocks():
     AllStocks_screen = Toplevel(master)
     AllStocks_screen.title('All Stocks')
     #Buttons
-    Button(AllStocks_screen, text="Apple stock", image = appleimage, command=AppleStock).grid(row=0, column=0)
-    Button(AllStocks_screen, text="Netflix stock", image = netfliximage, command=NetflixStock).grid(row=0, column=1)
-    Button(AllStocks_screen, text="Amazon stock", image = Amazonimage, command=AmazonStock).grid(row=1, column=0)
-    Button(AllStocks_screen, text="Facebook stock", image = Facebookimage, command=FacebookStock).grid(row=1, column=1)
-    Label(AllStocks_screen, text="Company Symbol : ").grid(row=4, sticky=W)
-    Label(AllStocks_screen, text="Stock current value:").grid(row=6, sticky=W)
+    AllStocks_screen.configure(background='black')
+    Button(AllStocks_screen, text="Apple stock", bg='black', fg='white', image = appleimage, command=AppleStock).grid(row=0,sticky=N, column=0)
+    Button(AllStocks_screen, text="Netflix stock", bg='black', fg='white', image = netfliximage, command=NetflixStock).grid(row=0,sticky=N, column=1)
+    Button(AllStocks_screen, text="Amazon stock", bg='black', fg='white', image = Amazonimage, command=AmazonStock).grid(row=1,sticky=N, column=0)
+    Button(AllStocks_screen, text="Facebook stock", bg='black', fg='white', image = Facebookimage, command=FacebookStock).grid(row=1, sticky=N,column=1)
+    Label(AllStocks_screen, text="Company Symbol : ", bg='black', fg='white').grid(row=4, sticky=W)
+    Label(AllStocks_screen, text="Stock current value:", bg='black', fg='white').grid(row=6, sticky=W)
 
     def stock_price():
      
@@ -341,17 +348,17 @@ def AllStocks():
         Current_stock.set(price)
         create_data(1, str(price))
  
-    result2 = Label(AllStocks_screen, text="", textvariable=Current_stock).grid(row=6, column=1, sticky=W)
+    result2 = Label(AllStocks_screen, text="", textvariable=Current_stock, bg='black', fg='white').grid(row=6, column=1, sticky=W)
  
     e1 = Entry(AllStocks_screen)
     e1.grid(row=4, column=1)
  
-    b = Button(AllStocks_screen, text="Show", command=stock_price)
+    b = Button(AllStocks_screen, text="Show", bg='black', fg='white', command=stock_price)
     b.grid(row=4, column=2, columnspan=2, rowspan=2, padx=5, pady=5)
 
 #Image import
-img = Image.open('raspberry.png')
-img = img.resize((250,150))
+img = Image.open('6s.jpg')
+img = img.resize((400,300))
 img = ImageTk.PhotoImage(img)
 
 appleimage = Image.open('apple.png')
@@ -397,13 +404,13 @@ profilimage = ImageTk.PhotoImage(profilimage)
 
 
 #Labels
-Label(master, text = "Group x", font=('Calibri',14)).grid(row=0,sticky=N,pady=10)
-Label(master, text = "Raspberry PI", font=('Calibri',12)).grid(row=1,sticky=N)
-Label(master, image=img).grid(row=2,sticky=N,pady=15)
+Label(master, text = "Group X", bg='black', fg='white', font=('Calibri',14)).grid(row=0,sticky=N,pady=10)
+Label(master, text = "Sixth Sense", bg='black', fg='white', font=('Calibri',12)).grid(row=1,sticky=N)
+Label(master, image=img, bg='black', fg='white',).grid(row=2,sticky=N,pady=15)
 
 
 #Buttons
-Button(master, text='Register', font=('Calibri',12), width=20,command=register).grid(row=3,sticky=N)
-Button(master, text='Login', font=('Calibri',12), width=20,command=login).grid(row=4,sticky=N,pady=10)
+Button(master, text='Register', bg='black', fg='white', font=('Calibri',12), width=20,command=register).grid(row=3,sticky=N)
+Button(master, text='Login', bg='black', fg='white', font=('Calibri',12), width=20,command=login).grid(row=4,sticky=N,pady=10)
 
 master.mainloop()
