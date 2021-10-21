@@ -362,10 +362,6 @@ netfliximage = Image.open('netflix.png')
 netfliximage = netfliximage.resize((150,150))
 netfliximage = ImageTk.PhotoImage(netfliximage)
 
-profilimage = Image.open('profil.png')
-profilimage = profilimage.resize((50,50))
-profilimage = ImageTk.PhotoImage(profilimage)
-
 Facebookimage = Image.open('facebook.png')
 Facebookimage = Facebookimage.resize((150,150))
 Facebookimage = ImageTk.PhotoImage(Facebookimage)
