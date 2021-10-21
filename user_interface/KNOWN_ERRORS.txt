@@ -1,0 +1,1 @@
+1: Når du vil hæve / indsætte penge, så hæver / indsætter den kun den sidste indtastede beløb. Hvis man indtaster 100, og efterfølgende 50kr, så vil der kun blive indsat 50kr. Dette kan løses ved at lukke og åbne vinduet efter første 100kr, eller indtaste 150kr som det endelige beløb.
