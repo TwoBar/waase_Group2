@@ -100,7 +100,7 @@ def register():
     Label(register_screen, text="First name", bg='black', fg='white', font=('Calibri',12)).grid(row=2,sticky=W)
     Label(register_screen, text="Last name", bg='black', fg='white', font=('Calibri',12)).grid(row=3,sticky=W)
     Label(register_screen, text="Password", bg='black', fg='white', font=('Calibri',12)).grid(row=4,sticky=W)
-    notif = Label(register_screen, font=('Calibri',12))
+    notif = Label(register_screen, bg='black', font=('Calibri',12))
     notif.grid(row=7,sticky=N,pady=10)    
 
     #Entries
@@ -341,7 +341,7 @@ def AllStocks():
     Button(AllStocks_screen, text="Facebook stock", bg='black', fg='white', image = Facebookimage, command=FacebookStock).grid(row=1, sticky=N,column=1)
     Label(AllStocks_screen, text="Company Symbol : ", bg='black', fg='white').grid(row=4, sticky=W)
     Label(AllStocks_screen, text="Stock current value:", bg='black', fg='white').grid(row=6, sticky=W)
-
+    price = 0
     def stock_price():
      
         price = stock_info.get_live_price(e1.get())
