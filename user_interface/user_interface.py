@@ -69,7 +69,7 @@ def finish_reg():
         return
 
     if email == "" or first_name == "" or last_name == "" or password == "": #Sikre kunden udfylder alle felter.
-        notif.config(fg="red",text="Please udfyld alle oplysninger * ") #Hvis et af felterne er tomme, skrives dette til kunden
+        notif.config(fg="red",text="Please type all you information * ") #Hvis et af felterne er tomme, skrives dette til kunden
         return
     else:
         mycursor.execute("INSERT INTO user (first_name, last_name, email, password) VALUES (%s,%s,%s,%s)", (first_name, last_name, email, password))
@@ -95,7 +95,7 @@ def register():
     register_screen.configure(background='black')
 
     #Laver labels på skærmen
-    Label(register_screen, text="Udfyldt dine detaljer her, for at opret dig", bg='black', fg='white', font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
+    Label(register_screen, text="Type in all your information below:", bg='black', fg='white', font=('Calibri',12)).grid(row=0,sticky=N,pady=10)
     Label(register_screen, text="Email", bg='black', fg='white', font=('Calibri',12)).grid(row=1,sticky=W)
     Label(register_screen, text="First name", bg='black', fg='white', font=('Calibri',12)).grid(row=2,sticky=W)
     Label(register_screen, text="Last name", bg='black', fg='white', font=('Calibri',12)).grid(row=3,sticky=W)
@@ -110,7 +110,7 @@ def register():
     Entry(register_screen, textvariable=temp_password,show="*") .grid(row=4, column=1,padx=5)
 
     #Opretter en knap som hedder "Registrer"
-    Button(register_screen, text="Registrer", command = finish_reg, bg='black', fg='white', font=('Calibri',12)).grid(row=6, sticky=N,pady=10)
+    Button(register_screen, text="Register", command = finish_reg, bg='black', fg='white', font=('Calibri',12)).grid(row=6, sticky=N,pady=10)
     #Definere ny variable for hvis kunden vil logge ind
 
 def clock():
