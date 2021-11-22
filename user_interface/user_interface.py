@@ -14,7 +14,7 @@ global screen
 global b
 global w
 
-#Connecter til database Kunder, hvis den ikke eksistere, opretter den en ny
+#create database connector
 db = mysql.connector.connect(
     host="waaseteam2.mysql.database.azure.com",
     user="group2@waaseteam2",
@@ -23,14 +23,14 @@ db = mysql.connector.connect(
 )
 mycursor = db.cursor()
 
-#Åbner vores gui - Main Screen, og kalder den Bank App 
+#initiate the tinker master page
 master = Tk()
 master.title('Project')
 master.configure(background='black')
-#Funktioner
-#Definere funktion for kunde oprettelse
+#functions
 
 
+#Activate the in screen rappresentation
 def activate_screen():
     global ui_screenx
     global screen
@@ -357,9 +357,9 @@ def AllStocks():
     b.grid(row=4, column=2, columnspan=2, rowspan=2, padx=5, pady=5)
 
 #Image import
-img = Image.open('6s.jpg')
-img = img.resize((400,300))
-img = ImageTk.PhotoImage(img)
+img = Image.open('6s.jpg')#select file
+img = img.resize((400,300))#define size
+img = ImageTk.PhotoImage(img)#create tinker object
 
 appleimage = Image.open('apple.png')
 appleimage = appleimage.resize((150,150))
