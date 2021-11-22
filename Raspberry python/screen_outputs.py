@@ -1,4 +1,11 @@
+# this library define hou datatype 2 & 3 are displayed by the device's screen
+
+
 from sense_hat import SenseHat
+
+
+# define rgb for colours
+
 blue = (0, 0, 255)
 red = (100, 0, 70)
 green = (0, 150, 100)
@@ -11,6 +18,7 @@ n = black
 y = yellow
 sense = SenseHat()
 
+# define the array of pixel for the direction functions
 def down():
     creeper_pixels = [
                         n, n, n, n, n, n, n, n,
@@ -59,7 +67,13 @@ def right():
                     n, n, n, n, n, b, b, b
                 ]                
     sense.set_pixels(creeper_pixels)
-def watch(hh,mm,ss,tt):
+
+
+
+
+
+# define the array of pixel for the watch functions
+def watch(hh,mm,ss,tt): # args hours minutes seconds and last unit
     if tt <= 8 and tt != 0:
         t1 = y
     else:
@@ -341,5 +355,5 @@ def watchscreen(h24, h23, h22, m16, m15, s16, s15, t8,
                     h9, h8, h7, m6, m5, s6, s5, t3,
                     h6, h5, h4, m4, m3, s4, s3, t2,
                     h3, h2, h1, m2, m1, s2, s1, t1
-                ]                
+                ]  # plot the watch display
     sense.set_pixels(creeper_pixels)
